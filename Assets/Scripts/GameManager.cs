@@ -23,12 +23,20 @@ public class GameManager : MonoBehaviour
 
     public Text scoreText;
     public Text multiText;
+    public Text trackText;
+    public Text trackLengthText;
 
     public float totalNotes;
     public float normalHits;
     public float goodHits;
     public float perfectHits;
     public float missedHits;
+
+    float totalMins;
+    float totalSecs;
+
+    float currentMins;
+    float currentSecs;
 
     public GameObject resultsScreen;
     public Text percentHitText, normalsText, goodsText, perfectsText, missesText, rankText, finalScoreText;
@@ -40,6 +48,16 @@ public class GameManager : MonoBehaviour
         scoreText.text = "Score: 0";
         currentMultiplier = 1;
         totalNotes = FindObjectsOfType<NoteObject>().Length;
+        trackText.text = theMusic.name;
+
+        //float musicLength = theMusic.clip.length;
+
+        //totalMins = Mathf.Floor(musicLength / 60);
+        //totalSecs = Mathf.Floor(musicLength % 60);
+
+        //trackLengthText.text = "0:00 | " + theMusic.clip.length.ToString("0:00");
+        //trackLengthText.text = "0:00 | " + totalMins.ToString("00") + ":"  + totalSecs.ToString("00");
+        trackLengthText.text = "0:00 | " + GetTotalTime();
     }
 
     // Update is called once per frame
@@ -95,8 +113,35 @@ public class GameManager : MonoBehaviour
                 rankText.text = rankVal;
 
                 finalScoreText.text = currentScore.ToString();
+                
             }
         }
+        if(theMusic.isPlaying)
+        {
+
+
+            //trackLengthText.text = theMusic.time.ToString("0:00") + " | " + theMusic.clip.length.ToString("0:00");
+            //trackLengthText.text = GetCurrentTime() + " | " + theMusic.clip.length.ToString("0:00");
+            trackLengthText.text = GetCurrentTime() + " | " + GetTotalTime();
+        }
+    }
+
+    string GetCurrentTime()
+    {
+        currentMins = Mathf.Floor(theMusic.time / 60);
+        currentSecs = Mathf.Floor(theMusic.time % 60);
+
+        string outputTime = currentMins.ToString("00") + ":" + currentSecs.ToString("00");
+        return outputTime;
+    }
+
+    string GetTotalTime()
+    {
+        totalMins = Mathf.Floor(theMusic.clip.length / 60);
+        totalSecs = Mathf.Floor(theMusic.clip.length % 60);
+
+        string outputTime = totalMins.ToString("00") + ":" + totalSecs.ToString("00");
+        return outputTime;
     }
 
     public void NoteHit()
